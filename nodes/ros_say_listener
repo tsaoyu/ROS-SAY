@@ -1,0 +1,29 @@
+#!/usr/bin/python
+
+import os
+import platform
+import rospy
+from std_msgs.msg import String
+
+class ROSSay():
+    def __init__(self):
+        self.sub = rospy.Subscriber('/rossay', String, self.say, queue_size=10)
+
+
+    def say(self, msg):
+        tx = repr(msg.data)
+        os.system('spd-say %s' % tx)
+    
+    
+
+
+if __name__ == "__main__":
+    rospy.init_node("ros_say_node", anonymous = False)
+    rossay = ROSSay()
+   
+    rate = rospy.Rate(50)
+    while not rospy.is_shutdown():
+        try:
+            rate.sleep()
+        except rospy.ROSInterruptException:
+            break 
